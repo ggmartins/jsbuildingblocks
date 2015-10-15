@@ -120,117 +120,170 @@
     display: none; } -->
 
 <script type="text/javascript">//<![CDATA[ 
-var markers = [
-];
+  var markers = [
+  ];
 
-var counter=0;
-var map;
-var list=[];
-var markers=[];
-window.onload=function(){
-map = new google.maps.Map(document.getElementById("map-canvas"), {
-    zoom: 2,
-    panControl:true,
-    zoomControl:true,
-    mapTypeControl:false,
-    scaleControl:false,
-    streetViewControl:false,
-    overviewMapControl:false,
-    rotateControl:false,
-    signed_in:false,
-    infobox_background_color: 'rgba(103, 183, 225, 0.8)',
-    infobox_styling: 'custom',
-    infobox_text_color: '#fff',
-    overlay_color: '#67b7e1',
-    overlay_color_hsl: {"hue":142,"sat":67,"lum":64},
-    map_style: 'custom',
-    map_type: 'terrain',
-    center: new google.maps.LatLng(18, 0),
-});
-
-/*mapTypeId: google.maps.MapTypeId.ROADMAP,*/
+  var counter=0;
+  var map;
+  var list=[];
+  var markers=[];
 
 
-  for (var i = 0; i < markers.length; i++) {
-    var point = markers[i];
-    setMarkers(map, point);
+  function setMarkerControls(mkr)
+  {
+    $("#"+mkr+"_link").click(function(){
+      $node = $(this).closest('li');
+      $node.remove();
+      for(var i=0; i<markers.length; i++)
+      {
+        if(markers[i].id==mkr) 
+          markers[i].setMap(null);
+      }
+      return false;
+    });
+
+    $("body").on("click", "#"+mkr+"_button", function () {
+      $node = $("#"+mkr+"_link").closest('li');
+      $node.remove();
+      for(var i=0; i<markers.length; i++)
+      {
+        if(markers[i].id==mkr) 
+          markers[i].setMap(null);
+      }
+      return false;
+    });
   }
 
-}//]]>  
 
-function setMarkers(map, point) {
-    var image = {
-    url: 'images/greendot.png',
-    size: new google.maps.Size(20, 32),
-    origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(0, 32)
-  };
 
-  var shape = {
-    coords: [1, 1, 1, 20, 18, 20, 18, 1],
-    type: 'poly'
-  };
-  
-  var infowindow = new google.maps.InfoWindow({
-    content: '<div>'+point[0]+' <input type="button" id="'+point[0]+'_button" value="remove"/></div>'
-  });
+  function initMap() {
 
-  var marker = new google.maps.Marker({
-    position: {lat: point[1], lng: point[2]},
-    map: map,
-    icon: image,
-    shape: shape,
-    title: point[0],
-    zIndex: point[3]
-  });
-  marker.id=point[0];
-  marker.addListener('click', function() {
-    infowindow.open(map, marker);
-  });
-  markers.push(marker);
-}
 
+var customMapType = new google.maps.StyledMapType(
+    [{"featureType":"all","elementType":"all","stylers":[{"visibility":"on"},{"saturation":"0"},{"lightness":"0"},{"hue":"#ffa700"},{"weight":"1"}]},{"featureType":"administrative","elementType":"all","stylers":[{"visibility":"on"},{"hue":"#ff0000"}]},{"featureType":"administrative","elementType":"geometry","stylers":[{"color":"#bababa"},{"saturation":"0"},{"lightness":"0"},{"gamma":"1.00"},{"visibility":"on"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#bababa"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"color":"#bababa"}]},{"featureType":"administrative","elementType":"labels","stylers":[{"color":"#ff0000"},{"visibility":"simplified"}]},{"featureType":"administrative","elementType":"labels.text","stylers":[{"visibility":"simplified"}]},{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"administrative","elementType":"labels.icon","stylers":[{"color":"#bababa"},{"visibility":"off"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"visibility":"on"},{"hue":"#e400ff"},{"weight":"1.31"}]},{"featureType":"landscape","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"color":"#bababa"}]},{"featureType":"landscape","elementType":"labels.text","stylers":[{"visibility":"off"},{"color":"#bababa"}]},{"featureType":"landscape.man_made","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45},{"visibility":"off"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road.local","elementType":"all","stylers":[{"visibility":"simplified"},{"hue":"#ff0000"}]},{"featureType":"road.local","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"hue":"#ff0000"}]},{"featureType":"road.local","elementType":"labels","stylers":[{"visibility":"on"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"visibility":"simplified"},{"color":"#ffffff"}]}]
+  );
+
+    var customMapTypeId = 'custom_style';
+
+    map = new google.maps.Map(document.getElementById("map-canvas"), {
+        zoom: 2,
+        panControl:true,
+        zoomControl:true,
+        mapTypeControl:false,
+        scaleControl:false,
+        streetViewControl:false,
+        overviewMapControl:false,
+        rotateControl:false,
+        signed_in:false,
+        center: new google.maps.LatLng(18, 0),
+        mapTypeControlOptions: {
+          mapTypeIds: [google.maps.MapTypeId.ROADMAP, customMapTypeId]
+        }
+    });
+
+    map.mapTypes.set(customMapTypeId, customMapType);
+    map.setMapTypeId(customMapTypeId);
+  }
+
+  window.onload=function(){
+    /*map = new google.maps.Map(document.getElementById("map-canvas"), {
+        zoom: 2,
+        panControl:true,
+        zoomControl:true,
+        mapTypeControl:false,
+        scaleControl:false,
+        streetViewControl:false,
+        overviewMapControl:false,
+        rotateControl:false,
+        signed_in:false,
+        infobox_background_color: 'rgba(103, 183, 225, 0.8)',
+        infobox_styling: 'custom',
+        infobox_text_color: '#fff',
+        overlay_color: '#67b7e1',
+        overlay_color_hsl: {"hue":142,"sat":67,"lum":64},
+        map_style: 'custom',
+        map_type: 'terrain',
+        center: new google.maps.LatLng(18, 0),
+    }); */
+
+    initMap();
+    /*mapTypeId: google.maps.MapTypeId.ROADMAP,*/
+
+    for (var i = 0; i < markers.length; i++) {
+      var point = markers[i];
+      setMarker(map, point);
+    }
+
+    google.maps.event.addListener(map, 'click', function(event) {
+      if($('#check_add').is(':checked')) {
+          var mkr="Name"+(++counter);
+          var lat=event.latLng.lat();
+          var lng=event.latLng.lng();
+          setMarker(map, ["Name"+(counter), lat, lng, 4]);
+          var node=$("<li>"+
+                       "<label id=\'"+mkr+"\'>"+mkr+", "+lat+", "+lng+" <label/>"+
+                       "<a href=\'#\' id=\'"+mkr+"_link\'>remove<a/>"+
+                     "</li>");
+          $("#markerslist").append(node);
+          setMarkerControls(mkr);
+      }
+    });
+  }
+
+  function setMarker(map, point) {
+      var image = {
+      url: 'images/greendot.png',
+      size: new google.maps.Size(20, 32),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(0, 32)
+    };
+
+    var shape = {
+      coords: [1, 1, 1, 20, 18, 20, 18, 1],
+      type: 'poly'
+    };
+    
+    var infowindow = new google.maps.InfoWindow({
+      content: '<div>'+point[0]+' <input type="button" id="'+point[0]+'_button" value="remove"/></div>'
+    });
+
+    var marker = new google.maps.Marker({
+      position: {lat: point[1], lng: point[2]},
+      map: map,
+      icon: image,
+      shape: shape,
+      title: point[0],
+      zIndex: point[3]
+    });
+    marker.id=point[0];
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+    markers.push(marker);
+  }
+//]]>
 </script>
 
-<script>
+<script>//<![CDATA[ 
   $( document ).ready(function() {
     $( "#button_add" ).click(function() {
       var mkr=$("[name='mkr']").val(); 
       var lat=$("[name='lat']").val();
       var lng=$("[name='lng']").val();
-      setMarkers(map, [mkr, Number(lat), Number(lng), 4]);
+      setMarker(map, [mkr, Number(lat), Number(lng), 4]);
       var node=$("<li>"+
                    "<label id=\'"+mkr+"\'>"+mkr+", "+lat+", "+lng+" <label/>"+
                    "<a href=\'#\' id=\'"+mkr+"_link\'>remove<a/>"+
                  "</li>");
       $("#markerslist").append(node);
 
-      $("#"+mkr+"_link").click(function(){
-        $node = $(this).closest('li');
-        $node.remove();
-        for(var i=0; i<markers.length; i++)
-        {
-          if(markers[i].id==mkr) 
-            markers[i].setMap(null);
-        }
-        return false;
-      });
-
-      $("body").on("click", "#"+mkr+"_button", function () {
-        $node = $("#"+mkr+"_link").closest('li');
-        $node.remove();
-        for(var i=0; i<markers.length; i++)
-        {
-          if(markers[i].id==mkr) 
-            markers[i].setMap(null);
-        }
-        return false;
-      });
+      setMarkerControls(mkr);
 
       $("[name='mkr']").val("Name"+(++counter));
     });
     
   });
+ //]]>
  </script>
 
 
@@ -255,11 +308,12 @@ function setMarkers(map, point) {
 
     <div style="margin: 0 auto;position: relative;width: 950px;height: 450px;">
       <form>
-        Coordinate Name, Lat, Lng:
-        <input type="text" name="mkr" value="Name0" />,
-        <input type="text" name="lat" value="0.0" />,
-        <input type="text" name="lng" value="0.0" />
+        <b>Coordinate Name, Lat, Lng:</b>
+        <input type="text" name="mkr" value="Name0" size="15" />,
+        <input type="text" name="lat" value="0.0" size="15" />,
+        <input type="text" name="lng" value="0.0" size="15" />
         <input type="button" id="button_add" value="Add" />
+        <input type="checkbox" id="check_add" value="Check Add" /> <b>Enable markers by map click</b> <br>
       </form>
       <ul id="markerslist">
       </ul>
