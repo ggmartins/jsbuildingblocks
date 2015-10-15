@@ -1,0 +1,268 @@
+<html>
+ <head> 
+  <script src="scripts/jquery-2.1.4.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=false"></script>
+  <style type="text/css">
+    .wrapper {
+      position: relative;
+      width: 950px;
+      height: 450px;
+      overflow: hidden;
+      margin: 10px; }
+      .wrapper > i {
+        display: block;
+        position: absolute; 
+      }
+      .wrapper > i.top {
+        top: 0;
+        border-top: 5px solid rgba(0, 0, 0, 0.15); 
+      }
+      .wrapper > i.top:after {
+        top: -10px;
+        border-top: 5px solid white; 
+      }
+      .wrapper > i.right {
+        right: 0;
+        border-right: 5px solid rgba(0, 0, 0, 0.15); 
+      }
+      .wrapper > i.right:after {
+        right: -10px;
+        border-right: 5px solid white; 
+      }
+      .wrapper > i.bottom {
+        bottom: 0;
+        border-bottom: 5px solid rgba(0, 0, 0, 0.15); 
+      }
+      .wrapper > i.bottom:after {
+        bottom: -10px;
+        border-bottom: 5px solid white; 
+      }
+      .wrapper > i.left {
+        left: 0;
+        border-left: 5px solid rgba(0, 0, 0, 0.15); 
+      }
+      .wrapper > i.left:after {
+        left: -10px;
+        border-left: 5px solid white; 
+      }
+      .wrapper > i.top:not(.right):not(.left), .wrapper > i.bottom:not(.right):not(.left) {
+        height: 5px;
+        left: 15px;
+        right: 15px; 
+      }
+      .wrapper > i.left:not(.top):not(.bottom), .wrapper > i.right:not(.top):not(.bottom) {
+        width: 5px;
+        top: 15px;
+        bottom: 15px; 
+      }
+      .wrapper > i.top.right, .wrapper > i.top.left, .wrapper > i.bottom.right,
+        .wrapper > i.bottom.left {
+          width: 10px;
+          height: 10px; 
+      }
+      .wrapper > i.top.right:after, .wrapper > i.top.left:after,
+        .wrapper > i.bottom.right:after, .wrapper > i.bottom.left:after {
+          content: "";
+          position: absolute;
+          width: 15px;
+          height: 15px; 
+      }
+      .wrapper > i.top.right {
+        border-top-right-radius: 10px; 
+      }
+      .wrapper > i.top.right:after {
+        border-top-right-radius: 15px; 
+      }
+      .wrapper > i.top.left {
+        border-top-left-radius: 10px; 
+      }
+      .wrapper > i.top.left:after {
+        border-top-left-radius: 15px; 
+      }
+      .wrapper > i.bottom.right {
+        border-bottom-right-radius: 10px; 
+      }
+      .wrapper > i.bottom.right:after {
+        border-bottom-right-radius: 15px; 
+      }
+      .wrapper > i.bottom.left {
+        border-bottom-left-radius: 10px; 
+      }
+      .wrapper > i.bottom.left:after {
+        border-bottom-left-radius: 15px; 
+      }
+
+      #map-canvas {
+        width: inherit;
+        height: inherit; 
+      }
+
+      a[href^="http://maps.google.com/maps"]{display:none !important}
+      a[href^="https://maps.google.com/maps"]{display:none !important}
+
+      .gmnoprint a, .gmnoprint span, .gm-style-cc {
+          display:none;
+      }
+      .gmnoprint div {
+          background:none !important;
+      }
+
+      ul
+      {
+          list-style-type: none;
+      }
+  </style>
+  
+<!-- #map-canvas {
+  width: inherit;
+  height: inherit; }
+  #map-canvas .gmnoprint {
+    display: none; } -->
+
+<script type="text/javascript">//<![CDATA[ 
+var markers = [
+];
+
+var counter=0;
+var map;
+var list=[];
+var markers=[];
+window.onload=function(){
+map = new google.maps.Map(document.getElementById("map-canvas"), {
+    zoom: 2,
+    panControl:true,
+    zoomControl:true,
+    mapTypeControl:false,
+    scaleControl:false,
+    streetViewControl:false,
+    overviewMapControl:false,
+    rotateControl:false,
+    signed_in:false,
+    infobox_background_color: 'rgba(103, 183, 225, 0.8)',
+    infobox_styling: 'custom',
+    infobox_text_color: '#fff',
+    overlay_color: '#67b7e1',
+    overlay_color_hsl: {"hue":142,"sat":67,"lum":64},
+    map_style: 'custom',
+    map_type: 'terrain',
+    center: new google.maps.LatLng(18, 0),
+});
+
+/*mapTypeId: google.maps.MapTypeId.ROADMAP,*/
+
+
+  for (var i = 0; i < markers.length; i++) {
+    var point = markers[i];
+    setMarkers(map, point);
+  }
+
+}//]]>  
+
+function setMarkers(map, point) {
+    var image = {
+    url: 'images/greendot.png',
+    size: new google.maps.Size(20, 32),
+    origin: new google.maps.Point(0, 0),
+    anchor: new google.maps.Point(0, 32)
+  };
+
+  var shape = {
+    coords: [1, 1, 1, 20, 18, 20, 18, 1],
+    type: 'poly'
+  };
+  
+  var infowindow = new google.maps.InfoWindow({
+    content: '<div>'+point[0]+' <input type="button" id="'+point[0]+'_button" value="remove"/></div>'
+  });
+
+  var marker = new google.maps.Marker({
+    position: {lat: point[1], lng: point[2]},
+    map: map,
+    icon: image,
+    shape: shape,
+    title: point[0],
+    zIndex: point[3]
+  });
+  marker.id=point[0];
+  marker.addListener('click', function() {
+    infowindow.open(map, marker);
+  });
+  markers.push(marker);
+}
+
+</script>
+
+<script>
+  $( document ).ready(function() {
+    $( "#button_add" ).click(function() {
+      var mkr=$("[name='mkr']").val(); 
+      var lat=$("[name='lat']").val();
+      var lng=$("[name='lng']").val();
+      setMarkers(map, [mkr, Number(lat), Number(lng), 4]);
+      var node=$("<li>"+
+                   "<label id=\'"+mkr+"\'>"+mkr+", "+lat+", "+lng+" <label/>"+
+                   "<a href=\'#\' id=\'"+mkr+"_link\'>remove<a/>"+
+                 "</li>");
+      $("#markerslist").append(node);
+
+      $("#"+mkr+"_link").click(function(){
+        $node = $(this).closest('li');
+        $node.remove();
+        for(var i=0; i<markers.length; i++)
+        {
+          if(markers[i].id==mkr) 
+            markers[i].setMap(null);
+        }
+        return false;
+      });
+
+      $("body").on("click", "#"+mkr+"_button", function () {
+        $node = $("#"+mkr+"_link").closest('li');
+        $node.remove();
+        for(var i=0; i<markers.length; i++)
+        {
+          if(markers[i].id==mkr) 
+            markers[i].setMap(null);
+        }
+        return false;
+      });
+
+      $("[name='mkr']").val("Name"+(++counter));
+    });
+    
+  });
+ </script>
+
+
+ </head>
+<body>
+  <!-- style="border: black solid 1px"
+   class="wrapper" -->
+    <div style="margin: 0 auto;position: relative;width: 950px;height: 450px;"
+     class="wrapper">
+      <div  class="map-canvas" id="map-canvas"></div>
+
+      <i class="top"></i>
+      <i class="right"></i>
+      <i class="bottom"></i>
+      <i class="left"></i>
+      <i class="top left"></i>
+      <i class="top right"></i>
+      <i class="bottom left"></i>
+      <i class="bottom right"></i>
+    </div>
+
+
+    <div style="margin: 0 auto;position: relative;width: 950px;height: 450px;">
+      <form>
+        Coordinate Name, Lat, Lng:
+        <input type="text" name="mkr" value="Name0" />,
+        <input type="text" name="lat" value="0.0" />,
+        <input type="text" name="lng" value="0.0" />
+        <input type="button" id="button_add" value="Add" />
+      </form>
+      <ul id="markerslist">
+      </ul>
+    </div>
+ </body>
+</html>
