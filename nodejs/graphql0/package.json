@@ -1,0 +1,20 @@
+{
+  "name": "wappv0",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server1.ts",
+  "dependencies": {
+    "@types/graphql": "^14.5.0",
+    "@types/node": "^12.12.6",
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "express-session": "^1.17.0",
+    "graphql": "^14.5.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
