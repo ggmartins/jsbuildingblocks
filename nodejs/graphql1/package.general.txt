@@ -1,0 +1,7 @@
+ts-node
+nodemon
+typescript 
+tslint
+express
+apollo-server-express
+npm i -D ts-node nodemon typescript tslint express apollo-server-express
