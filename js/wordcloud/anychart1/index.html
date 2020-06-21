@@ -4,28 +4,26 @@
   <meta charset="UTF-8">
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <title>Shop Streamer</title>
+  <title>Stock Streamer</title>
   <!--link href="https://playground.anychart.com/NqAPYRCG/iframe" rel="canonical"-->
   <link href="https://fonts.googleapis.com/css?family=Notable" rel="stylesheet"> 
   <meta content="Trending Stocks" name="keywords">
-
+  <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-core.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-tag-cloud.min.js"></script>
   <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
-  <style>html, body, #container {
+  <!--style>html, body, #container {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
     /*text-transform: uppercase;*/
-}</style>
- </head>
- <body>
-  <div id="container"></div>
-  <script src="js/anychart-base.min.js"></script>
-  <script src="js/anychart-tag-cloud.min.js"></script>
-  <script type="text/javascript">anychart.onDocumentReady(function () {
+}</style-->
+<script type="text/javascript">
+  var chart
+  anychart.onDocumentReady(function () {
 
   var data = [
     {"x": "GOOG", "value": 1090000000, category: "Positive"},
@@ -61,36 +59,46 @@
   // add a color range
   chart.colorRange().enabled(true); */
 
-  var chart = anychart.tagCloud()
+  chart = anychart.tagCloud()
   chart.background({fill: "#2F2F2F 3.5"})
   chart.hovered({fill: "#0000FF 3.5"})
   chart.selected({fill: "#0000FF 3.5"})
   chart.palette(palette);
-  //chart.fontFamily('Notable');
+  chart.fontFamily('Notable');
   chart.data(data)
 
 
-  chart.title('Trending Electronics')
+  chart.title('Trending Stocks')
   // set array of angles, by which words will be placed
   chart.angles([0])
   // enable color range
   chart.colorRange(true);
   // set color range length
-  chart.colorRange().length('80%');
+  chart.colorRange().length('80%')
 
-  chart.tooltip().title("Status");
-  chart.tooltip().format("{%category}: {%x}\nCharge: {%value}");
+  chart.tooltip().title("Status")
+  chart.tooltip().format("{%category}: {%x}\nCharge: {%value}")
 
   chart.listen("pointClick", function(e){
     //alert("Clicked:" + e.point.get("x"))
-    e.point.selected({enabled: false})
+    //e.point.selected({enabled: false})
+    //setInterval(function(){ e.point.selected({enabled: false})  }, 1000);
   });
 
-  chart.selected().labels(true);
+  chart.selected().labels(true)
 
   // display chart
-  chart.container("container");
+  chart.container("container")
   chart.draw();
+  setInterval(function(){ window.location.reload() }, 3000);
 });</script>
+ </head>
+ <body>
+  <div id="container" style="width: 520px; height: 360px"></div>
+  <!--script src="js/anychart-base.min.js"></script>
+  <script src="js/anychart-tag-cloud.min.js"></script-->
+
+
+ <button onclick="chart.draw()"></button>
  </body>
 </html>
