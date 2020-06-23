@@ -24,73 +24,74 @@
 <script type="text/javascript">
   var chart
   anychart.onDocumentReady(function () {
+    document.fonts.load('16px Notable').then(() => {
+      var data = [
+        {"x": "GOOG", "value": 1090000000, category: "Positive"},
+        {"x": "AAPL", "value": 983000000, category: "Positive"},
+        {"x": "FB", "value": 544000000, category: "Positive"},
+        {"x": "MRNA", "value": 527000000, category: "Stable"},
+        {"x": "FMTX", "value": 422000000, category: "Stable"},
+        {"x": "UONE", "value": 281000000, category: "Stable"},
+        {"x": "BAC", "value": 267000000, category: "Stable"},
+        {"x": "GNUS", "value": 261000000, category: "Stable"},
+        {"x": "CIG.C", "value": 229000000, category: "Negative"},
+        {"x": "FANG", "value": 229000000, category: "Negative"},
+        {"x": "TSLA", "value": 150000000, category: "Negative"},
+        {"x": "UBER", "value": 148000000, category: "Red"},
+        {"x": "NOK", "value": 129000000, category: "Red"},
+        {"x": "MSFT", "value": 129000000, category: "New"},
+        {"x": "JCPNQ", "value": 121000000, category: "Disabled"}
+      ]
+      
+      let palette = anychart.palettes.distinctColors()
+      palette.items(
+          ['#00FF00', '#FFFF00', '#FFA500', '#FF0000','#F0F0F0', '#101010']
+      );
 
-  var data = [
-    {"x": "GOOG", "value": 1090000000, category: "Positive"},
-    {"x": "AAPL", "value": 983000000, category: "Positive"},
-    {"x": "FB", "value": 544000000, category: "Positive"},
-    {"x": "MRNA", "value": 527000000, category: "Stable"},
-    {"x": "FMTX", "value": 422000000, category: "Stable"},
-    {"x": "UONE", "value": 281000000, category: "Stable"},
-    {"x": "BAC", "value": 267000000, category: "Stable"},
-    {"x": "GNUS", "value": 261000000, category: "Stable"},
-    {"x": "CIG.C", "value": 229000000, category: "Negative"},
-    {"x": "FANG", "value": 229000000, category: "Negative"},
-    {"x": "TSLA", "value": 150000000, category: "Negative"},
-    {"x": "UBER", "value": 148000000, category: "Red"},
-    {"x": "NOK", "value": 129000000, category: "Red"},
-    {"x": "MSFT", "value": 129000000, category: "New"},
-    {"x": "JCPNQ", "value": 121000000, category: "Disabled"}
-  ]
-  
-  let palette = anychart.palettes.distinctColors()
-  palette.items(
-      ['#00FF00', '#FFFF00', '#FFA500', '#FF0000','#F0F0F0', '#101010']
-  );
+      /*
+      // create and configure a color scale.
+      var customColorScale = anychart.scales.linearColor();
+      customColorScale.colors(["#ffcc00", "#00ccff"]);
 
-  /*
-  // create and configure a color scale.
-  var customColorScale = anychart.scales.linearColor();
-  customColorScale.colors(["#ffcc00", "#00ccff"]);
+      // set the color scale as the color scale of the chart
+      chart.colorScale(customColorScale);
 
-  // set the color scale as the color scale of the chart
-  chart.colorScale(customColorScale);
+      // add a color range
+      chart.colorRange().enabled(true); */
 
-  // add a color range
-  chart.colorRange().enabled(true); */
-
-  chart = anychart.tagCloud()
-  chart.background({fill: "#2F2F2F 3.5"})
-  chart.hovered({fill: "#0000FF 3.5"})
-  chart.selected({fill: "#0000FF 3.5"})
-  chart.palette(palette);
-  chart.fontFamily('Notable');
-  chart.data(data)
+      chart = anychart.tagCloud()
+      chart.background({fill: "#2F2F2F 3.5"})
+      chart.hovered({fill: "#0000FF 3.5"})
+      chart.selected({fill: "#0000FF 3.5"})
+      chart.palette(palette);
+      chart.fontFamily('Notable');
+      chart.data(data)
 
 
-  chart.title('Trending Stocks')
-  // set array of angles, by which words will be placed
-  chart.angles([0])
-  // enable color range
-  chart.colorRange(true);
-  // set color range length
-  chart.colorRange().length('80%')
+      chart.title('Trending Stocks')
+      // set array of angles, by which words will be placed
+      chart.angles([0])
+      // enable color range
+      chart.colorRange(true);
+      // set color range length
+      chart.colorRange().length('80%')
 
-  chart.tooltip().title("Status")
-  chart.tooltip().format("{%category}: {%x}\nCharge: {%value}")
+      chart.tooltip().title("Status")
+      chart.tooltip().format("{%category}: {%x}\nCharge: {%value}")
 
-  chart.listen("pointClick", function(e){
-    //alert("Clicked:" + e.point.get("x"))
-    //e.point.selected({enabled: false})
-    //setInterval(function(){ e.point.selected({enabled: false})  }, 1000);
-  });
+      chart.listen("pointClick", function(e){
+        //alert("Clicked:" + e.point.get("x"))
+        //e.point.selected({enabled: false})
+        //setInterval(function(){ e.point.selected({enabled: false})  }, 1000);
+      });
 
-  chart.selected().labels(true)
+      chart.selected().labels(true)
 
-  // display chart
-  chart.container("container")
-  chart.draw();
-  setInterval(function(){ window.location.reload() }, 3000);
+      // display chart
+      chart.container("container")
+      chart.draw();
+      //setInterval(function(){ window.location.reload() }, 3000);
+    }).catch(err=>{ alert(err)})
 });</script>
  </head>
  <body>
